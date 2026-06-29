@@ -232,20 +232,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentMode === 'watermark') {
             const hasStrokes = hasBrushStrokes();
             if (hasStrokes) {
-                // Create mask image (black bg, white strokes)
+                // Create composited image (original image + red strokes on top)
                 const exportCanvas = document.createElement('canvas');
                 exportCanvas.width = baseImage.width;
                 exportCanvas.height = baseImage.height;
                 const exCtx = exportCanvas.getContext('2d');
                 
-                exCtx.fillStyle = 'black';
-                exCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+                exCtx.drawImage(baseImage, 0, 0, exportCanvas.width, exportCanvas.height);
                 exCtx.drawImage(brushCanvas, 0, 0, exportCanvas.width, exportCanvas.height);
                 
-                const maskBlob = await new Promise(resolve => exportCanvas.toBlob(resolve, 'image/png'));
-                formData.append('mask', maskBlob, 'mask.png');
+                const compositedBlob = await new Promise(resolve => exportCanvas.toBlob(resolve, 'image/jpeg', 0.95));
+                formData.set('image', compositedBlob, 'image.jpg'); // Overwrite original image
                 
-                finalPrompt = "Remove the object/watermark completely covered by the white brush strokes in the mask image and restore the background seamlessly. " + finalPrompt;
+                finalPrompt = "Remove the object or watermark completely covered by the red brush strokes in this image and restore the background seamlessly. Return the clean image without any red strokes. " + finalPrompt;
             }
         }
         
