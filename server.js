@@ -70,6 +70,8 @@ app.post('/api/process-image', upload.fields([{ name: 'image' }, { name: 'mask' 
             const imageObj = resultContent.find(item => item.image);
             if (imageObj && imageObj.image) {
                 let finalResultUrl = imageObj.image;
+                
+                // Fetch the generated image from OSS to bypass frontend CORS restrictions
                 if (finalResultUrl.startsWith('http')) {
                     try {
                         const imgResp = await axios.get(finalResultUrl, { responseType: 'arraybuffer' });
