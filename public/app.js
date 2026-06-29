@@ -263,12 +263,68 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Success
+            let finalOutputDataUrl = data.result;
+
+            if (currentMode === 'watermark' && hasBrushStrokes()) {
+                const blendCanvas = document.createElement('canvas');
+                blendCanvas.width = baseImage.width;
+                blendCanvas.height = baseImage.height;
+                const blendCtx = blendCanvas.getContext('2d');
+
+                // 1. Draw original base image
+                blendCtx.drawImage(baseImage, 0, 0, blendCanvas.width, blendCanvas.height);
+
+                // 2. Load the AI result image
+                const aiResultImg = new Image();
+                await new Promise((resolve, reject) => {
+                    aiResultImg.onload = resolve;
+                    aiResultImg.onerror = reject;
+                    aiResultImg.src = data.result;
+                });
+
+                // 3. Create a mask canvas from brush strokes
+                const maskCanvas = document.createElement('canvas');
+                maskCanvas.width = blendCanvas.width;
+                maskCanvas.height = blendCanvas.height;
+                const maskCtx = maskCanvas.getContext('2d');
+                
+                maskCtx.drawImage(brushCanvas, 0, 0, maskCanvas.width, maskCanvas.height);
+                
+                // Make mask strokes fully opaque
+                const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height);
+                for (let i = 0; i < maskData.data.length; i += 4) {
+                    if (maskData.data[i+3] > 0) {
+                        maskData.data[i] = 255;
+                        maskData.data[i+1] = 255;
+                        maskData.data[i+2] = 255;
+                        maskData.data[i+3] = 255; // Make fully opaque
+                    }
+                }
+                maskCtx.putImageData(maskData, 0, 0);
+
+                // 4. Isolate the AI result using the mask
+                const isolatedAiCanvas = document.createElement('canvas');
+                isolatedAiCanvas.width = blendCanvas.width;
+                isolatedAiCanvas.height = blendCanvas.height;
+                const isolatedCtx = isolatedAiCanvas.getContext('2d');
+                
+                isolatedCtx.drawImage(aiResultImg, 0, 0, isolatedAiCanvas.width, isolatedAiCanvas.height);
+                isolatedCtx.globalCompositeOperation = 'destination-in';
+                isolatedCtx.drawImage(maskCanvas, 0, 0, isolatedAiCanvas.width, isolatedAiCanvas.height);
+
+                // 5. Draw the isolated AI patches onto the original image
+                blendCtx.globalCompositeOperation = 'source-over';
+                blendCtx.drawImage(isolatedAiCanvas, 0, 0, blendCanvas.width, blendCanvas.height);
+
+                finalOutputDataUrl = blendCanvas.toDataURL('image/jpeg', 0.95);
+            }
+
             loadingState.classList.add('hidden');
             resultSection.classList.remove('hidden');
             
-            resultImage.src = data.result;
+            resultImage.src = finalOutputDataUrl;
             originalImage.src = baseImage.src;
-            downloadBtn.href = data.result;
+            downloadBtn.href = finalOutputDataUrl;
             
             // Reset slider
             sliderInput.value = 50;
