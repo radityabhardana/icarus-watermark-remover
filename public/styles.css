@@ -111,13 +111,19 @@ body {
     align-items: center;
 }
 
+.mode-toggle-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 32px;
+}
+
 .mode-toggle {
     display: inline-flex;
     background-color: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: 30px;
     padding: 6px;
-    margin-bottom: 32px;
     gap: 8px;
 }
 
@@ -540,5 +546,85 @@ button:active, .btn-primary:active, .btn-ghost:active {
     
     .workspace-header h2 {
         font-size: 1.75rem;
+    }
+
+    .app-container {
+        padding: 24px 16px;
+    }
+
+    .workspace-content {
+        padding: 32px 24px;
+        min-height: auto;
+    }
+
+    .upload-box {
+        padding: 48px 24px;
+    }
+    
+    .canvas-panel {
+        padding: 16px;
+        min-height: 300px;
+    }
+    
+    .preview-container {
+        gap: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        padding: 12px 16px;
+    }
+    
+    .brand-name {
+        font-size: 1.1rem;
+    }
+
+    .status-indicator {
+        font-size: 0.75rem;
+    }
+
+    .app-container {
+        padding: 16px 12px;
+    }
+
+    .workspace-content {
+        padding: 24px 16px;
+    }
+    
+    .workspace-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .workspace-header p {
+        font-size: 0.95rem;
+    }
+
+    .mode-toggle {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border-radius: var(--radius-sm);
+        padding: 6px;
+        gap: 4px;
+    }
+    
+    .mode-btn {
+        width: 100%;
+        border-radius: var(--radius-sm);
+        padding: 12px;
+    }
+
+    .upload-box {
+        padding: 40px 16px;
+    }
+
+    .canvas-panel {
+        padding: 8px;
+        min-height: 200px;
+    }
+
+    .image-comparison-wrapper {
+        padding: 8px;
     }
 }
