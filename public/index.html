@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icarus Watermark</title>
+    <meta name="description" content="Precision AI watermark removal">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <div class="topbar-content">
+            <div class="brand">
+                <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 12c2.5-3 6.5-6 10-6 2.5 0 4 2 6 2-2 1.5-3.5 3-4 6-1 5-4.5 7-8 7-3.5 0-5.5-2.5-5.5-2.5l1.5-6.5z"/>
+                    <path d="M12 9c-1.5 2-2 5-1 8"/>
+                </svg>
+                <h1 class="brand-name">Icarus</h1>
+            </div>
+            <div class="topbar-right">
+                <span class="status-indicator">
+                    <span class="status-dot"></span>
+                    Systems Online
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- MAIN WORKSPACE -->
+        <main class="workspace">
+            <div class="workspace-header">
+                <div class="mode-toggle">
+                    <button id="modeWatermark" class="mode-btn active">Watermark Remover</button>
+                    <button id="modeEnhance" class="mode-btn">Enhance Image</button>
+                </div>
+                <h2 id="workspaceTitle">Remove Watermark</h2>
+                <p id="workspaceDesc">Upload an image and brush over any object to remove it seamlessly.</p>
+            </div>
+
+            <div class="workspace-content">
+                <!-- STEP 1: UPLOAD -->
+                <div class="upload-section" id="dropZone">
+                    <div class="upload-box">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="4" ry="4"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        <p class="upload-title">Drop your image here</p>
+                        <p class="upload-sub">or <button id="browseBtn">browse files</button> (JPEG, PNG, WEBP)</p>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/jpeg, image/png, image/webp" hidden>
+                </div>
+                
+                <!-- STEP 2: PREVIEW & BRUSH -->
+                <div class="preview-container hidden" id="previewContainer">
+                    <div class="canvas-panel">
+                        <div class="canvas-wrapper" id="canvasWrapper">
+                            <canvas id="imageCanvas"></canvas>
+                            <canvas id="brushCanvas"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-panel">
+                        <div class="control-group">
+                            <label for="brushSize">Brush Size</label>
+                            <div class="slider-container">
+                                <input type="range" id="brushSize" min="5" max="100" value="30">
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="promptInput">Instruction (Optional)</label>
+                            <input type="text" id="promptInput" placeholder="e.g. Remove the red text" value="Remove any watermarks, texts, or logos from the image seamlessly">
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="clearBrushBtn" class="btn-ghost">Clear Strokes</button>
+                            <button id="cancelBtn" class="btn-ghost">Reset</button>
+                            <button id="processBtn" class="btn-primary">Execute Clean</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: LOADING -->
+                <div class="loading-state hidden" id="loadingState">
+                    <div class="spinner"></div>
+                    <h3>Processing Image</h3>
+                    <p>Icarus is analyzing your strokes and reconstructing the background...</p>
+                </div>
+
+                <!-- STEP 4: RESULT -->
+                <div class="result-section hidden" id="resultSection">
+                    <div class="image-comparison-wrapper">
+                        <div class="image-comparison" id="imageComparison">
+                            <img id="resultImage" class="img-after" src="" alt="After">
+                            <img id="originalImage" class="img-before" src="" alt="Before">
+                            <div class="slider-line" id="sliderLine">
+                                <div class="slider-handle">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 18l-6-6 6-6M15 18l6-6-6-6"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <input type="range" min="0" max="100" value="50" class="slider-input" id="sliderInput">
+                        </div>
+                    </div>
+                    <div class="action-buttons centered">
+                        <button id="newBtn" class="btn-ghost">Start New</button>
+                        <a id="downloadBtn" class="btn-primary" download="icarus_clean.jpg" target="_blank">Download Result</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
