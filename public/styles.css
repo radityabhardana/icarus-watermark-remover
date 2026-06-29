@@ -315,10 +315,18 @@ body {
 
 /* CONTROLS */
 .controls-panel {
-    display: grid;
-    grid-template-columns: 1fr 2fr auto;
+    display: flex;
+    flex-wrap: wrap;
     gap: 24px;
     align-items: end;
+}
+
+.controls-panel .control-group:nth-child(1) {
+    flex: 0 0 120px;
+}
+
+.controls-panel .control-group:nth-child(2) {
+    flex: 1 1 300px;
 }
 
 .control-group {
@@ -350,9 +358,9 @@ input[type=text] {
     background-color: var(--bg-base);
     border: 1px solid var(--border-strong);
     color: var(--text-primary);
-    padding: 0 16px;
+    padding: 0 20px;
     height: 48px;
-    border-radius: var(--radius-sm);
+    border-radius: 9999px;
     font-family: inherit;
     font-size: 0.95rem;
     transition: border-color 0.2s;
@@ -366,6 +374,8 @@ input[type=text]:focus {
 .action-buttons {
     display: flex;
     gap: 12px;
+    flex: 1 0 auto;
+    justify-content: flex-end;
 }
 
 .action-buttons.centered {
@@ -376,7 +386,7 @@ input[type=text]:focus {
 button, .btn-primary, .btn-ghost {
     height: 48px;
     padding: 0 24px;
-    border-radius: var(--radius-sm);
+    border-radius: 9999px;
     font-family: inherit;
     font-size: 0.95rem;
     font-weight: 600;
