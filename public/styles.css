@@ -98,33 +98,41 @@ body {
 /* MAIN WORKSPACE */
 .workspace {
     width: 100%;
-    max-width: 900px;
+    max-width: 720px;
     display: flex;
     flex-direction: column;
 }
 
 .workspace-header {
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    order: 1;
 }
 
 .mode-toggle-wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: 32px;
+    margin-top: 0;
+    margin-bottom: 32px;
+    order: 2;
+}
+
+.workspace-content {
+    order: 3;
 }
 
 .mode-toggle {
     display: inline-flex;
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 9999px;
     padding: 6px;
     gap: 8px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .mode-btn {
@@ -132,22 +140,30 @@ body {
     border: none;
     color: var(--text-secondary);
     padding: 10px 24px;
-    border-radius: 24px;
+    border-radius: 9999px;
     font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     height: auto;
 }
 
+.mobile-text {
+    display: none;
+}
+
+.desktop-text {
+    display: inline;
+}
+
 .mode-btn:active {
-    transform: translateY(0);
+    transform: scale(0.96);
 }
 
 .mode-btn.active {
     background-color: var(--text-primary);
     color: var(--bg-base);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
 }
 
 .mode-btn:hover:not(.active) {
@@ -158,7 +174,7 @@ body {
 .workspace-header h2 {
     font-size: 2.25rem;
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em;
     margin-bottom: 12px;
 }
 
@@ -170,14 +186,16 @@ body {
 }
 
 .workspace-content {
-    background-color: var(--bg-surface);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-lg);
+    background-color: rgba(26, 26, 29, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
     padding: 48px;
     min-height: 480px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* UPLOAD SECTION */
@@ -196,18 +214,19 @@ body {
     text-align: center;
     padding: 64px 40px;
     background: rgba(255, 255, 255, 0.015);
-    border: 1px dashed rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-md);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     width: 100%;
     max-width: 600px;
 }
 
 .upload-box:hover, .upload-section.dragover .upload-box {
-    border-color: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.03);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
 .upload-icon {
@@ -242,6 +261,9 @@ body {
     cursor: pointer;
     text-decoration: underline;
     font-weight: 500;
+    height: auto;
+    padding: 0;
+    display: inline;
 }
 
 /* PREVIEW & CANVAS */
@@ -552,9 +574,21 @@ button:active, .btn-primary:active, .btn-ghost:active {
         padding: 24px 16px;
     }
 
+    .workspace-header {
+        order: 1;
+        margin-bottom: 24px;
+    }
+    
     .workspace-content {
+        order: 2;
         padding: 32px 24px;
         min-height: auto;
+    }
+    
+    .mode-toggle-wrapper {
+        order: 3;
+        margin-top: 32px;
+        margin-bottom: 0;
     }
 
     .upload-box {
@@ -590,33 +624,43 @@ button:active, .btn-primary:active, .btn-ghost:active {
 
     .workspace-content {
         padding: 24px 16px;
+        border-radius: var(--radius-md);
     }
     
     .workspace-header h2 {
         font-size: 1.5rem;
+        margin-bottom: 8px;
     }
     
     .workspace-header p {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+        padding: 0 10px;
     }
 
     .mode-toggle {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        border-radius: var(--radius-sm);
-        padding: 6px;
+        display: inline-flex;
+        width: auto;
+        padding: 4px;
         gap: 4px;
     }
     
     .mode-btn {
-        width: 100%;
-        border-radius: var(--radius-sm);
-        padding: 12px;
+        flex: none;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        border-radius: 24px;
+    }
+    
+    .mobile-text {
+        display: inline;
+    }
+    
+    .desktop-text {
+        display: none;
     }
 
     .upload-box {
-        padding: 40px 16px;
+        padding: 32px 16px;
     }
 
     .canvas-panel {
@@ -626,5 +670,14 @@ button:active, .btn-primary:active, .btn-ghost:active {
 
     .image-comparison-wrapper {
         padding: 8px;
+    }
+    
+    .action-buttons {
+        gap: 8px;
+    }
+    
+    button, .btn-primary, .btn-ghost {
+        height: 44px;
+        font-size: 0.9rem;
     }
 }
