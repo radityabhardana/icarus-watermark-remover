@@ -69,7 +69,18 @@ app.post('/api/process-image', upload.fields([{ name: 'image' }, { name: 'mask' 
             const resultContent = choices[0].message.content;
             const imageObj = resultContent.find(item => item.image);
             if (imageObj && imageObj.image) {
-                return res.json({ success: true, result: imageObj.image });
+                let finalResultUrl = imageObj.image;
+                if (finalResultUrl.startsWith('http')) {
+                    try {
+                        const imgResp = await axios.get(finalResultUrl, { responseType: 'arraybuffer' });
+                        const mimeType = imgResp.headers['content-type'] || 'image/png';
+                        const base64Img = Buffer.from(imgResp.data, 'binary').toString('base64');
+                        finalResultUrl = `data:${mimeType};base64,${base64Img}`;
+                    } catch (err) {
+                        console.error('Failed to download image from OSS:', err.message);
+                    }
+                }
+                return res.json({ success: true, result: finalResultUrl });
             }
         }
 
