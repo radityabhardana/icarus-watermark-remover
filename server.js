@@ -81,6 +81,10 @@ app.post('/api/process-image', upload.fields([{ name: 'image' }, { name: 'mask' 
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`Server running at http://localhost:${port}`);
+    });
+}
+
+module.exports = app;
